@@ -9,18 +9,18 @@ export function createProductRepository(database: Database){
         if(!take){
             return query.all()
         } 
-        return query.limit(take).all()
+        return await query.limit(take).all()
     }
 
     async function createProduct(product: CreateProductInput){
-        return database.orm.public.Product.create(product)
+        return await database.orm.public.Product.create(product)
     }
     async function findProductById(id: number){
-        return database.orm.public.Product.where({id: id}).first()
+        return await database.orm.public.Product.where({id: id}).first()
     }
 
     async function findProductByTitle(name: string) {
-        return database.orm.public.Product.where({name: name}).first()
+        return await database.orm.public.Product.where({name: name}).first()
     }
     return {getAllProducts, createProduct, findProductById, findProductByTitle}
 }

@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import type { ProductResponse } from "../../dto/responses.js";
 import type { ErrorResponse } from "../../dto/errors.js";
+import type { CreateProductRequest } from "../../dto/requests.js";
 
 
 export interface ProductHandler{
@@ -13,7 +14,7 @@ export interface ProductHandler{
         res: Response<ProductResponse | ErrorResponse>
     ) => Promise<void>;
     createProduct: (
-        req: Request,
+        req: Request<{}, {}, CreateProductRequest>,
         res: Response<ProductResponse | ErrorResponse>
     ) => Promise<void>;
 

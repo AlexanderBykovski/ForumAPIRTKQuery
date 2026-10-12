@@ -13,7 +13,7 @@ export function createProductHandler(service: ProductService){
 
         const { take } = req.query
         if (!take) {
-            res.status(200).json(service.getProducts());
+            res.status(200).json(await service.getProducts());
             return
         }
         const takeNum = Number(take)
@@ -26,7 +26,7 @@ export function createProductHandler(service: ProductService){
             )
             return
         }
-        const products = service.getProducts(takeNum)
+        const products = await service.getProducts(takeNum)
         res.status(200).json(products)
     }
 
@@ -43,7 +43,7 @@ export function createProductHandler(service: ProductService){
             return
         }
 
-        const product = service.findProduct(productId);
+        const product = await service.findProduct(productId);
 
         if (!product) {
             res.status(404).json({
@@ -59,12 +59,13 @@ export function createProductHandler(service: ProductService){
         req: Request<{}, {}, CreateProductRequest>, 
         res: Response<ProductResponse | ErrorResponse>
     ) {
-        const { title, price, description } = req.body;
+        const { name, price, image, category } = req.body;
 
         if (
-            typeof title !== 'string' || !title.trim() ||
+            typeof name !== 'string' || !name.trim() ||
             typeof price !== 'number' || price <= 0 ||
-            typeof description !== 'string' || !description.trim()
+            typeof image !== 'string' || !image.trim() ||
+            typeof category !== 'string' || !category.trim()
         ) {
             res.status(422).json({
                 message: 'Invalid product data',
@@ -74,9 +75,10 @@ export function createProductHandler(service: ProductService){
 
         try {
             const createdProduct: Product | null = await service.createNewProduct({
-                title,
+                name,
                 price,
-                description
+                image,
+                category
             });
 
             if (!createdProduct) {

@@ -2,30 +2,28 @@ import type { ProductRepository } from "../../domain/product/repository.js";
 import type { CreateProductInput } from "./products.types.js";
 
 export function createProductService(repository: ProductRepository) {
-    function getProducts(take?: number) {
+    async function getProducts(take?: number) {
         return repository.getAllProducts(take)
     }
     
-    function findProduct(id: number) {
+    async function findProduct(id: number) {
         return repository.findProductById(id)
     }
     
-    function createNewProduct(data: CreateProductInput) {
-        let { title, price, description } = data;
+    async function createNewProduct(data: CreateProductInput) {
+        let { name, price, image, category } = data;
 
-        if(repository.findProductByTitle(title)) {
+        if(await repository.findProductByTitle(name)) {
             return null;
         }
-        
-        let products = repository.getAllProducts();
         let product = {
-            id: products.length + 1,
-            title: title,
+            name: name,
             price: price,
-            description: description
+            image: image,
+            category: category
         };
         
-        return repository.createProduct(product);
+        return await repository.createProduct(product);
     }
     return {getProducts, findProduct, createNewProduct}
 }

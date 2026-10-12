@@ -1,13 +1,14 @@
 import type { Product } from "../../domain/product/entity.js";
 
 export interface CreateProductInput {
-    title: string;
+    name: string;
     price: number;
-    description: string;
+    image: string;
+    category: string
 }
 
 export interface ProductService {
-    getProducts: (take?: number) => Product[];
-    findProduct: (id: number) => Product | undefined,
-    createNewProduct: ( data: CreateProductInput) => Promise<Product> | null,
+    getProducts: (take?: number) => Promise<Product[]>;
+    findProduct: (id: number) => Promise<Product | null>,
+    createNewProduct: ( data: CreateProductInput) => Promise<Product | null>,
 }
