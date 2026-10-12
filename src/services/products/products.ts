@@ -11,16 +11,21 @@ export function createProductService(repository: ProductRepository) {
     }
     
     async function createNewProduct(data: CreateProductInput) {
-        let { name, price, image, category } = data;
+        let { name, price, image, categoryId } = data;
 
-        if(await repository.findProductByTitle(name)) {
-            return null;
+        if (
+            typeof name !== 'string' || !name.trim() ||
+            typeof price !== 'number' || price <= 0 ||
+            typeof image !== 'string' || !image.trim() ||
+            typeof categoryId !== 'string' || categoryId <= 0
+        ) {
+            throw new Error('INVALID_PRODUCT_DATA')
         }
         let product = {
             name: name,
             price: price,
             image: image,
-            category: category
+            categoryId: categoryId
         };
         
         return await repository.createProduct(product);

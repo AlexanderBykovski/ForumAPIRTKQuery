@@ -1,15 +1,16 @@
-import type { Product } from "./entity.ts"
+import type { Category } from "../category/entity.js"
+import type { Product, ProductWithCategory } from "./entity.ts"
 
 export interface CreateProductInput {
     name: string, 
     price: number,
     image: string,
-    category: string
+    categoryId: number
 }
 
 export interface ProductRepository {
-    getAllProducts: (take?: number) => Promise<Product[]>,
+    getAllProducts: (take?: number, categoryId?: number) => Promise<ProductWithCategory[]>,
     createProduct: (product: CreateProductInput) => Promise<Product>,
-    findProductById: (id: number) => Promise<Product | null>,
-    findProductByTitle: (name: string) => Promise<Product | null>,
+    findProductById: (id: number) => Promise<ProductWithCategory | null>,
+    findProductByTitle: (name: string) => Promise<ProductWithCategory | null>,
 }

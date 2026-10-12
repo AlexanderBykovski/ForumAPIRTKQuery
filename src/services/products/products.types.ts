@@ -4,7 +4,7 @@ export interface CreateProductInput {
     name: string;
     price: number;
     image: string;
-    category: string
+    categoryId: number;
 }
 
 export interface ProductService {

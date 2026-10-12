@@ -59,21 +59,20 @@ export function createProductHandler(service: ProductService){
         req: Request<{}, {}, CreateProductRequest>, 
         res: Response<ProductResponse | ErrorResponse>
     ) {
-        const { name, price, image, category } = req.body;
-
-        if (
-            typeof name !== 'string' || !name.trim() ||
-            typeof price !== 'number' || price <= 0 ||
-            typeof image !== 'string' || !image.trim() ||
-            typeof category !== 'string' || !category.trim()
-        ) {
-            res.status(422).json({
-                message: 'Invalid product data',
-            });
-            return 
-        }
-
         try {
+            const { name, price, image, category } = req.body;
+
+            if (
+                typeof name !== 'string' || !name.trim() ||
+                typeof price !== 'number' || price <= 0 ||
+                typeof image !== 'string' || !image.trim() ||
+                typeof category !== 'string' || !category.trim()
+            ) {
+                res.status(422).json({
+                    message: 'Invalid product data',
+                });
+                return 
+            }
             const createdProduct: Product | null = await service.createNewProduct({
                 name,
                 price,
@@ -90,11 +89,16 @@ export function createProductHandler(service: ProductService){
 
             res.status(201).json(createdProduct);
         } catch (error) {
-            console.error(error);
-
-            res.status(500).json({
-                message: 'Failed to create product',
-            });
+            if (error instanceof Error) {
+                if (error.message === 'PRODUCT_ALREADY_EXSISTS') {
+                    res.status(409).json({
+                        message: 'Product already exists'
+                    })
+                }
+            }
+            return res.status(500).json({
+                message: 'Internal server error'
+            })
         }
     }
     return { getAllProducts, createProduct, getProductById}
