@@ -8,6 +8,12 @@ import { createCategoryRepository } from "./repositories/category.js"
 import { createCategoryService } from "./services/category/category.js"
 import { createCategoryHandlers } from "./transport/handlers/category/category.js"
 import { createCategoryRouter } from "./transport/routers/category.js"
+import { createUserRepository } from "./repositories/user.js"
+import { createAuthService } from "./services/user/user.js"
+import { createUserHandler } from "./transport/handlers/user/user.js"
+import { hashPassword, verifyPassword } from "./lib/password.js"
+import { createUserRouter } from "./transport/routers/auth.js"
+import { signAccessToken } from "./lib/jwt.js"
 
 const PORT = 8000
 const HOST = "localhost"
@@ -25,9 +31,15 @@ const categoryService = createCategoryService(categoryRepository);
 const categoryHandlers = createCategoryHandlers(categoryService);
 const categoryRouter = createCategoryRouter(categoryHandlers);
 
+const userRepository = createUserRepository(db)
+const userService = createAuthService(userRepository, { hash: hashPassword, verify: verifyPassword}, { signAccessToken})
+const userHandler = createUserHandler(userService)
+const userRouter = createUserRouter(userHandler)
+
 app.use(express.json());
 app.use("/products", productRouter);
 app.use("/categories", categoryRouter)
+app.use("/auth", userRouter)
 
 app.listen(PORT, HOST, () => {
     console.log(`Server is running on http://${HOST}:${PORT}`)
