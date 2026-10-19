@@ -8,7 +8,7 @@ export interface CreateProductInput {
 }
 
 export interface ProductService {
-    getProducts: (take?: number) => Promise<Product[]>;
+    getProducts: (take?: number, categoryId?: number) => Promise<Product[]>;
     findProduct: (id: number) => Promise<Product | null>,
     createNewProduct: ( data: CreateProductInput) => Promise<Product | null>,
 }

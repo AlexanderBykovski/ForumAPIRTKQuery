@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
-import type { ProductResponse } from "../../dto/responses.js";
+import type { ProductResponse } from "../../dto/product/responses.js";
 import type { ErrorResponse } from "../../dto/errors.js";
-import type { CreateProductRequest } from "../../dto/requests.js";
+import type { CreateProductRequest } from "../../dto/product/requests.js";
 
 
 export interface ProductHandler{
