@@ -14,6 +14,8 @@ import { createUserHandler } from "./transport/handlers/user/user.js"
 import { hashPassword, verifyPassword } from "./lib/password.js"
 import { createUserRouter } from "./transport/routers/auth.js"
 import { signAccessToken } from "./lib/jwt.js"
+import cors from "cors"
+
 
 const PORT = 8000
 const HOST = "localhost"
@@ -35,6 +37,10 @@ const userRepository = createUserRepository(db)
 const userService = createAuthService(userRepository, { hash: hashPassword, verify: verifyPassword}, { signAccessToken})
 const userHandler = createUserHandler(userService)
 const userRouter = createUserRouter(userHandler)
+
+app.use(cors({
+    origin: "http://localhost:5173"
+}))
 
 app.use(express.json());
 app.use("/products", productRouter);
