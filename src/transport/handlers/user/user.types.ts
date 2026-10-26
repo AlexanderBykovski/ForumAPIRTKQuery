@@ -9,5 +9,13 @@ export interface UserHandler{
     login: (
         req: Request<{}, {}, AuthCredentialsRequest>,
         res: Response
-    ) => Promise<void>
+    ) => Promise<void>,
+    refresh: (
+        req: Request,
+        res: Response
+    ) => Promise<void>,
+    me: (
+        req: Request,
+        res: Response
+    ) => Promise<void>,
 }
