@@ -59,4 +59,4 @@ app.use("/auth", userRouter)
 
 app.listen(PORT, HOST, () => {
     console.log(`Server is running on http://${HOST}:${PORT}`)
-})
+})  
